@@ -27,36 +27,58 @@ function QopenToggle()
 endfunction
 
 call plug#begin()
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
   Plug 'junegunn/vim-easy-align'
   Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
   Plug 'preservim/nerdtree'
-  Plug 'prabirshrestha/vim-lsp'
-  Plug 'mattn/vim-lsp-settings'
-  Plug 'prabirshrestha/asyncomplete.vim'
-  Plug 'prabirshrestha/asyncomplete-lsp.vim'
   Plug 'ryanoasis/vim-devicons'
-  Plug 'Valloric/YouCompleteMe'
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  Plug 'junegunn/fzf.vim'
 call plug#end()
 
-inoremap <C-c> <Esc>
 nmap <C-g> :vimgrep // **/*<left><left><left><left><left><left>
 nmap <esc><esc> :noh<return>
+nmap <C-f> :Files<CR>
+nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gd <Plug>(coc-definition)
+
+inoremap <C-c> <Esc>
+
+"inoremap <silent><expr> <TAB>
+"      \ coc#pum#visible() ? coc#pum#next(1) :
+"      \ CheckBackspace() ? "\<Tab>" :
+"      \ coc#refresh()
+"inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+"
 inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
 
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 map <C-Right> :bnext<CR>
 map <C-Left> :bprevious<CR>
 map <C-b> :bdelete<CR>
 map <C-h> :b#<CR>
-
-map <C-f> :LspDocumentRangeFormat<CR>
 map <C-q> :call QopenToggle()<CR>
 map <C-s> :w<CR>
-map <C-e> :LspDeclaration<CR>
 map <C-^> :bo term<CR>
+
 nnoremap <C-t> :NERDTreeToggle<CR>
+
+" Use K to show documentation in preview window
+" nnoremap <silent> K :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
 
 colorscheme catppuccin-mocha
 let g:lsp_diagnostics_enabled = 0 
@@ -70,3 +92,7 @@ let g:c_syntax_for_h = 1
 hi CursorLine cterm=NONE ctermbg=darkred ctermfg=white
 
 xmap ga <Plug>(EasyAlign)
+
+" for displaying thin vertical lines at each indentation level for code indented with spaces
+let g:indentLine_defaultGroup = 'SpecialKey'
+
