@@ -11,8 +11,10 @@ set smartcase
 set noswapfile
 set cursorline
 set ttimeoutlen=0
+set mouse=a
 " terminal width
 set termwinsize=10x0 
+set encoding=utf-8
 filetype plugin indent on
 let @a = 0
 
@@ -36,9 +38,10 @@ call plug#begin()
   Plug 'vim-airline/vim-airline-themes'
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
+  Plug 'sheerun/vim-polyglot'
 call plug#end()
 
-nmap <C-g> :vimgrep // **/*<left><left><left><left><left><left>
+nmap <C-g> :Rg<CR>
 nmap <esc><esc> :noh<return>
 nmap <C-f> :Files<CR>
 nmap <silent> gr <Plug>(coc-references)
@@ -66,6 +69,9 @@ map <C-h> :b#<CR>
 map <C-q> :call QopenToggle()<CR>
 map <C-s> :w<CR>
 map <C-^> :bo term<CR>
+
+"map <ScrollWheelUp> <S-H><C-Y>
+"map <ScrollWheelDown> <S-L><C-E>
 
 nnoremap <C-t> :NERDTreeToggle<CR>
 
@@ -95,4 +101,3 @@ xmap ga <Plug>(EasyAlign)
 
 " for displaying thin vertical lines at each indentation level for code indented with spaces
 let g:indentLine_defaultGroup = 'SpecialKey'
-
